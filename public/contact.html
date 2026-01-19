@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support | SD24 Pages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* REUSE CORE CSS VARIABLES */
+        :root { --bg: #05070a; --primary: #6366f1; --secondary: #a855f7; --card-bg: rgba(255, 255, 255, 0.03); --text-main: #ffffff; --text-dim: #94a3b8; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .glow { position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%); top: -100px; left: 50%; z-index: -1; }
+
+        /* NAV & HEADER */
+        nav { padding: 30px 0; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 800; text-decoration: none; color: white; }
+        .logo span { color: var(--primary); }
+        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 30px; font-size: 14px; }
+        .header { text-align: center; padding: 60px 0; }
+        .gradient-text { background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* CONTACT FORM AREA */
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 40px; }
+        .contact-info { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); }
+        .info-item { margin-bottom: 25px; }
+        .info-item h4 { color: var(--primary); margin-bottom: 5px; }
+        
+        .contact-form { background: var(--card-bg); padding: 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-dim); }
+        input, textarea { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); }
+        .btn-send { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-send:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
+    </style>
+</head>
+<body>
+    <div class="glow"></div>
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">SD24<span>PAGES</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="library.html">Library</a>
+                <a href="contact.html" style="color: var(--primary)">Support</a>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>Need <span class="gradient-text">Assistance?</span></h1>
+            <p>Our team is here to help you with your order or any queries.</p>
+        </header>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="info-item">
+                    <h4>Direct Email</h4>
+                    <p>sd24pages@gmail.com</p>
+                </div>
+                <div class="info-item">
+                    <h4>WhatsApp Support</h4>
+                    <p>+91 8522984575</p>
+                </div>
+                <div class="info-item">
+                    <h4>Response Time</h4>
+                    <p>We typically reply within 2-4 hours.</p>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <div class="form-group">
+                    <label>Order Reference (Optional)</label>
+                    <input type="text" placeholder="UPI Transaction ID">
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea rows="4" placeholder="How can we help you?"></textarea>
+                </div>
+                <button class="btn-send">Send Message</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
