@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SD24 Pages | Premium Study Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CORE THEME - Matching Library & Contact */
+        :root {
+            --bg: #05070a;
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .glow { position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%); top: -100px; right: -100px; z-index: -1; }
+
+        /* Navigation - UPDATED */
+        nav { padding: 30px 0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; backdrop-filter: blur(10px); z-index: 1000; }
+        .logo { font-size: 22px; font-weight: 800; letter-spacing: -1px; text-decoration: none; color: white; }
+        .logo span { color: var(--primary); }
+        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 30px; font-size: 14px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* Hero */
+        .hero { padding: 120px 0 80px; text-align: center; }
+        .badge { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); color: #818cf8; padding: 8px 20px; border-radius: 100px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 24px; }
+        h1 { font-size: clamp(40px, 8vw, 70px); font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+        .gradient-text { background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-main { background: var(--primary); color: white; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-weight: 700; display: inline-block; transition: 0.3s; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3); }
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5); }
+
+        /* Steps Section - NEW */
+        .steps { padding: 80px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .step-card { text-align: center; padding: 30px; background: var(--card-bg); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .step-num { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-weight: 800; }
+
+        /* Footer - UPDATED */
+        footer { padding: 80px 0 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
+        .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
+        .footer-col a { display: block; color: var(--text-dim); text-decoration: none; margin-bottom: 10px; font-size: 14px; }
+        .footer-col a:hover { color: white; }
+        .copyright { text-align: center; color: #4b5563; font-size: 13px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body>
+
+    <div class="glow"></div>
+
+    <div class="container">
+        <nav>
+            <a href="index.html" class="logo">SD24<span>PAGES</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="library.html">Library</a>
+                <a href="contact.html">Support</a> </div>
+        </nav>
+
+        <header class="hero">
+            <span class="badge">New: 2026 Curriculum Notes</span>
+            <h1>Level up with <br><span class="gradient-text">Precision Notes.</span></h1>
+            <p>Skip the fluff. Get high-quality, structured PDF notes designed for rapid learning and exam success.</p>
+            <a href="library.html" class="btn-main">Browse Full Library</a>
+        </header>
+
+        <section class="steps">
+            <div class="section-title">
+                <h2>How to Get Your Notes</h2>
+            </div>
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <h4>Pick Subject</h4>
+                    <p>Choose your PDF from our extensive library.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <h4>Pay via UPI</h4>
+                    <p>Secure, instant payments using any UPI app.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <h4>Instant Access</h4>
+                    <p>Download your PDF immediately after payment.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-col" style="flex: 2;">
+                    <a href="#" class="logo">SD24<span>PAGES</span></a>
+                    <p style="color: var(--text-dim); margin-top: 15px; max-width: 300px;">Providing students with the best digital study tools since 2024.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="library.html">Browse Library</a>
+                    <a href="library.html">Free Samples</a>
+                    <a href="contact.html">Report Issue</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="contact.html">Contact Us</a> <a href="terms.html">Terms of Service</a> <a href="terms.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 SD24 Pages. All rights reserved. Professional PDF Education Assets.
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
