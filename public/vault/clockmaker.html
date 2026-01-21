@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short Fiction | SD24 Reader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --paper: #161a23;
+            --primary: #6366f1;
+            --text: #e2e8f0;
+        }
+
+        /* Prevent Text Selection */
+        * { -webkit-user-select: none; user-select: none; margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* Fixed Navigation Bar */
+        .reader-nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(22, 26, 35, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .back-btn {
+            color: white;
+            background: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover { background: #4f46e5; transform: scale(1.05); }
+
+        /* Story Container */
+        .story-wrapper {
+            max-width: 700px;
+            margin: 120px auto 60px;
+            padding: 40px;
+            background: var(--paper);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* Typography for Fiction */
+        .story-content {
+            font-family: 'Merriweather', serif; /* Classic serif for reading */
+            font-size: 1.15rem;
+            color: #cbd5e1;
+        }
+
+        .story-header { margin-bottom: 40px; text-align: center; }
+        .story-header h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.5rem; color: white; margin-bottom: 10px; }
+        .story-header .author { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+
+        .dropcap {
+            float: left;
+            font-size: 4rem;
+            line-height: 1;
+            padding-right: 12px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        footer { text-align: center; margin-top: 50px; color: #475569; font-size: 0.9rem; font-style: italic; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <nav class="reader-nav">
+        <a href="../library.html" class="back-btn">← Back to Library</a>
+        <div style="font-size: 12px; color: #94a3b8;">SECURE READING MODE</div>
+    </nav>
+
+    <div class="story-wrapper">
+        <header class="story-header">
+            <p class="author">Short Fiction</p>
+            <h1>The Clockmaker's Silence</h1>
+        </header>
+
+        <article class="story-content">
+            <span class="dropcap">E</span>very second in Elias’s shop was accounted for. Three hundred clocks lined the walls, a symphony of rhythmic ticking that most visitors found maddening, but Elias found it to be the only thing that made sense.
+            <br><br>
+            He didn't just fix gears; he listened to the heartbeat of time itself. But this morning, the rhythm had changed. One clock, a heavy oak grandfather piece in the corner, had stopped dead at 4:12 AM. 
+            <br><br>
+            It wasn't the broken spring that bothered him. It was the fact that as soon as that clock stopped, the wind outside ceased to blow, and the birds in the eaves went silent. Elias reached for his jeweler’s loupe, his hands trembling slightly. He realized then that he wasn't just repairing a clock—he was holding the rest of the world’s afternoon in his hands.
+            <br><br>
+            If he didn't move the gear now, tomorrow might never arrive.
+        </article>
+
+        <footer>
+            End of Story • © SD24 Digital Collection
+        </footer>
+    </div>
+
+    <script>
+        // Disable Right Click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Disable Print, Save, and View Source
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 80 || e.keyCode === 85 || e.keyCode === 73)) {
+                return false;
+            }
+        };
+    </script>
+</body>
+</html>

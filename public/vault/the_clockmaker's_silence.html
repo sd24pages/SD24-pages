@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short Story | SD24 Reader</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e14;
+            --panel: #161a23;
+            --primary: #6366f1;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        /* 1. PROTECTION: Prevent Text Selection */
+        * { 
+            -webkit-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.8;
+        }
+
+        /* 2. UNIVERSAL NAVIGATION BAR */
+        .nav-container { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            background: rgba(22, 26, 35, 0.95); 
+            backdrop-filter: blur(12px);
+            padding: 15px 8%; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            z-index: 1000; 
+            display: flex;
+            align-items: center;
+        }
+
+        .back-link { 
+            color: white; 
+            background: var(--primary); 
+            text-decoration: none; 
+            font-weight: 700; 
+            padding: 10px 22px; 
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .back-link:hover { 
+            background: #4f46e5; 
+            transform: translateX(-3px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* 3. STORY LAYOUT */
+        .story-wrapper {
+            max-width: 750px;
+            margin: 120px auto 60px;
+            padding: 50px;
+            background: var(--panel);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .story-header { margin-bottom: 40px; text-align: center; }
+        .story-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: white; }
+        .story-header .label { color: var(--primary); font-weight: 800; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
+
+        .story-content {
+            font-family: 'Merriweather', serif; /* Better for long reading */
+            font-size: 1.2rem;
+            color: #cbd5e1;
+        }
+
+        .dropcap {
+            float: left;
+            font-size: 4.5rem;
+            line-height: 1;
+            padding-right: 12px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .footer-note { text-align: center; margin-top: 60px; color: #475569; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="nav-container">
+        <a href="javascript:history.back()" class="back-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Books
+        </a>
+    </div>
+
+    <div class="story-wrapper">
+        <header class="story-header">
+            <p class="label">Short Fiction</p>
+            <h1>The Clockmaker's Silence</h1>
+        </header>
+
+        <article class="story-content">
+            <span class="dropcap">E</span>very second in Elias’s shop was accounted for. Three hundred clocks lined the walls, a symphony of rhythmic ticking that most visitors found maddening, but Elias found it to be the only thing that made sense.
+            <br><br>
+            He didn't just fix gears; he listened to the heartbeat of time itself. But this morning, the rhythm had changed. One clock, a heavy oak grandfather piece in the corner, had stopped dead at 4:12 AM. 
+            <br><br>
+            It wasn't the broken spring that bothered him. It was the fact that as soon as that clock stopped, the wind outside ceased to blow, and the birds in the eaves went silent. Elias reached for his jeweler’s loupe, his hands trembling slightly. 
+            <br><br>
+            He realized then that he wasn't just repairing a clock—he was holding the rest of the world’s afternoon in his hands. If he didn't move the gear now, tomorrow might never arrive.
+        </article>
+
+        <div class="footer-note">
+            End of Story • © SD24 Digital Library • Protected Content
+        </div>
+    </div>
+
+    <script>
+        // Disable Right Click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Disable Save (Ctrl+S), Print (Ctrl+P), and View Source (Ctrl+U)
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 80 || e.keyCode === 85 || e.keyCode === 73)) {
+                return false;
+            }
+        };
+
+        // Disable Dragging of any images if added later
+        document.ondragstart = function() { return false; };
+    </script>
+</body>
+</html>

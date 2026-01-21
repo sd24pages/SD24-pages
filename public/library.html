@@ -3,191 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD24 Global Library | Master Resource Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>SD24 | Master Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #020408;
-            --sidebar-bg: #0a0c10;
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
+        :root { 
+            --bg: #0b0e14; 
+            --primary: #6366f1; 
+            --row-bg: #161a23; 
+            --border: rgba(255, 255, 255, 0.08); 
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: white; min-height: 100vh; }
+
+        /* Navbar */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; border-bottom: 1px solid var(--border);
+            background: rgba(11, 14, 20, 0.9); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+        }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; }
+        .btn-dash { background: var(--primary); color: white; padding: 10px 22px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px; }
+
+        /* Content */
+        .container { max-width: 900px; margin: 40px auto; padding: 0 25px; }
+        .header-text { margin-bottom: 40px; }
+        .header-text h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 8px; }
+        .header-text p { color: #94a3b8; }
+
+        /* Search */
+        .search-container { margin-bottom: 35px; }
+        .search-input {
+            width: 100%; padding: 18px 25px; border-radius: 14px; border: 1px solid var(--border);
+            background: #1c212c; color: white; font-size: 1rem; outline: none;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); display: flex; overflow-x: hidden; }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 280px; height: 100vh; position: sticky; top: 0;
-            background: var(--sidebar-bg); border-right: 1px solid var(--border);
-            padding: 30px 20px; overflow-y: auto; z-index: 100;
+        /* Category Items */
+        .cat-list { display: flex; flex-direction: column; gap: 14px; }
+        .cat-item {
+            display: flex; align-items: center; background: var(--row-bg);
+            padding: 22px 28px; border-radius: 18px; text-decoration: none;
+            color: white; border: 1px solid var(--border); transition: 0.25s ease;
         }
-        .sidebar h4 { font-size: 10px; text-transform: uppercase; color: var(--primary); letter-spacing: 1.5px; margin: 25px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .sidebar a { display: block; color: var(--text-dim); text-decoration: none; font-size: 13px; padding: 10px; border-radius: 8px; transition: 0.2s; }
-        .sidebar a:hover { background: rgba(99, 102, 241, 0.1); color: white; padding-left: 15px; }
-
-        /* MAIN CONTENT */
-        .main-content { flex: 1; padding: 40px 5%; }
-        
-        /* TOP BAR */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; gap: 20px; }
-        .btn-back { padding: 10px 20px; border: 1px solid var(--border); border-radius: 12px; color: var(--text-dim); text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .btn-back:hover { border-color: var(--primary); color: white; }
-        .search-bar { flex: 1; max-width: 500px; background: var(--card-bg); border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px; color: white; outline: none; }
-
-        /* SECTIONS */
-        section { padding-top: 60px; margin-bottom: 40px; }
-        .sec-title { font-size: 26px; font-weight: 800; margin-bottom: 30px; color: white; border-left: 4px solid var(--primary); padding-left: 15px; }
-
-        /* GRID & CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card { 
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; 
-            padding: 30px; position: relative; overflow: hidden; transition: 0.4s;
-            display: flex; flex-direction: column; height: 100%;
-        }
-        .card:hover { transform: translateY(-8px); border-color: var(--primary); }
-        .card h3 { font-size: 18px; margin-bottom: 12px; }
-        .card p { font-size: 13px; color: var(--text-dim); margin-bottom: 15px; flex-grow: 1; }
-        
-        /* OVERLAY */
-        .overlay { 
-            position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; transition: 0.3s; transform: scale(1.1);
-        }
-        .card:hover .overlay { opacity: 1; transform: scale(1); }
-        .price { font-size: 22px; font-weight: 800; margin-bottom: 15px; }
-        .btn-wa { background: white; color: black; padding: 10px 25px; border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 14px; }
-
-        @media (max-width: 1024px) { .sidebar { display: none; } }
+        .cat-item:hover { transform: translateX(10px); border-color: var(--primary); background: #1e2430; }
+        .cat-icon { font-size: 1.4rem; margin-right: 20px; background: rgba(99, 102, 241, 0.1); padding: 10px; border-radius: 12px; }
+        .cat-info { flex: 1; }
+        .cat-info h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 2px; }
+        .cat-info p { font-size: 0.85rem; color: #64748b; }
+        .cat-arrow { font-weight: 800; color: var(--primary); font-size: 0.95rem; margin-left: 15px; }
     </style>
 </head>
 <body>
+<a href="library.html" style="position: absolute; top: 20px; left: 20px; color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 600;">✕ Cancel & Go Back</a>
+    <nav class="navbar">
+        <a href="index.html" class="logo">SD24</a>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button id="logoutBtn" style="display:none; background:none; border:none; color:#ff4d4d; cursor:pointer; font-weight:600;" onclick="logout()">Logout</button>
+            <a href="auth.html" id="loginBtn" class="btn-dash">Login</a>
+        </div>
+    </nav>
 
-    <aside class="sidebar">
-        <h2 style="color:white; margin-bottom:20px;">SD24<span>LIB</span></h2>
-        
-        <h4>General Education</h4>
-        <a href="#k12">K-12 Student Academy</a>
-        <a href="#lang">Language Hub</a>
-
-        <h4>IT Roadmap (01-09)</h4>
-        <a href="#it1">01. Computer Fundamentals</a>
-        <a href="#it2">02. Operating Systems</a>
-        <a href="#it3">03. Programming</a>
-        <a href="#it4">04. DSA Mastery</a>
-        <a href="#it5">05. Databases & SQL</a>
-        <a href="#it6">06. Web Development</a>
-        <a href="#it7">07. Networking</a>
-        <a href="#it8">08. Software Eng.</a>
-        <a href="#it9">09. Cyber Security</a>
-
-        <h4>IT Roadmap (10-18)</h4>
-        <a href="#it10">10. Cloud Computing</a>
-        <a href="#it11">11. Data Analytics</a>
-        <a href="#it12">12. AI & ML</a>
-        <a href="#it13">13. DevOps</a>
-        <a href="#it14">14. Mobile App Dev</a>
-        <a href="#it15">15. Testing & QA</a>
-        <a href="#it16">16. SysAdmin</a>
-        <a href="#it17">17. Emerging Tech</a>
-        <a href="#it18">18. Career Skills</a>
-    </aside>
-
-    <main class="main-content">
-        <div class="top-bar">
-            <a href="index.html" class="btn-back">← Back to Home</a>
-            <input type="text" class="search-bar" placeholder="Search any topic (e.g. Python, Networking)...">
+    <div class="container">
+        <div class="header-text">
+            <h1>Master Catalog</h1>
+            <p>Select a category to explore digital resources.</p>
         </div>
 
-        <section id="k12">
-            <h2 class="sec-title">K-12 Academy</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>High School Board Notes</h3>
-                    <p>Physics, Chemistry, and Mathematics simplified with Cornell method.</p>
-                    <div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_HighSchool_Notes" class="btn-wa">Buy on WhatsApp</a></div>
-                </div>
-                <div class="card" id="lang">
-                    <h3>Language Hub</h3>
-                    <p>Learn French, German, or Japanese with structured flashcard notes.</p>
-                    <div class="overlay"><span class="price">₹79</span><a href="https://wa.me/918522984575?text=Buy_Language_Notes" class="btn-wa">Buy on WhatsApp</a></div>
-                </div>
-            </div>
-        </section>
+        <div class="search-container">
+            <input type="text" id="catSearch" class="search-input" placeholder="Quick find a category...">
+        </div>
 
-        <section id="it1">
-            <h2 class="sec-title">IT Roadmap: Foundations</h2>
-            <div class="grid">
-                <div class="card">
-    <h3>01. Computer Fundamentals</h3>
-    <p>Basics of Computers, Hardware, Software, and Networking.</p>
-    ...
-    <div class="overlay">
-        <a href="https://pagescribe23.gumroad.com/l/computer_fundamentals" class="btn-wa" target="_blank">
-            Buy Now
-        </a>
+        <div class="cat-list" id="categoryContainer">
+            </div>
     </div>
-</div>
-                <div class="card" id="it2"><h3>02. Operating Systems</h3><p>Windows, Linux, and Kernel Processes.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_02_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it3"><h3>03. Programming</h3><p>Logic, OOP, C++, Java, and Python Core.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_03_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it4"><h3>04. DSA Mastery</h3><p>Data Structures and Competitive Algorithms.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_04_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it5"><h3>05. Databases & SQL</h3><p>Relational DBs, NoSQL, and Query Optimization.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_05_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it6"><h3>06. Web Development</h3><p>HTML, CSS, JS, and Full-Stack Frameworks.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_06_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it7"><h3>07. Networking</h3><p>OSI Model, TCP/IP, and Server Infrastructure.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_07_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it8"><h3>08. Software Engineering</h3><p>SDLC, Agile, and Git Version Control.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_08_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it9"><h3>09. Cyber Security</h3><p>Ethical Hacking and Network Defense.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/9118522984575?text=Buy_Module_09_" class="btn-wa">Buy on WhatsApp</a></div></div>
-            </div>
-        </section>
-
-        <section id="it10">
-            <h2 class="sec-title">IT Roadmap: Advanced</h2>
-            <div class="grid">
-                <div class="card"><h3>10. Cloud Computing</h3><p>AWS, Azure, and Cloud Architecture.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_10_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it11"><h3>11. Data Analytics</h3><p>PowerBI, Tableau, and Data Cleaning.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_11_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it12"><h3>12. AI & ML</h3><p>Neural Networks and Machine Learning.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_12_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it13"><h3>13. DevOps</h3><p>Docker, Kubernetes, and CI/CD Pipelines.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_13_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it14"><h3>14. Mobile App Dev</h3><p>Flutter, React Native, and App Logic.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/91YOURNUMBER?text=Buy_Module_14_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it15"><h3>15. Testing & QA</h3><p>Manual and Automation Testing.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_15_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it16"><h3>16. SysAdmin</h3><p>Server Management and IT Support.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_16_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it17"><h3>17. Emerging Tech</h3><p>Blockchain and Quantum Intro.</p><div class="overlay"><span class="price">
-</span><a href="https://wa.me/918522984575?text=Buy_Module_17_" class="btn-wa">Buy on WhatsApp</a></div></div>
-                <div class="card" id="it18"><h3>18. Career Skills</h3><p>Resume Building & Interview Tips.</p><div class="overlay"><span class="price"></span><a href="https://wa.me/918522984575?text=Buy_Module_18_" class="btn-wa">Buy on WhatsApp</a></div></div>
-            </div>
-        </section>
-
-        <footer>
-            <p>&copy; 2026 SD24 Pages. All rights reserved.</p>
-        </footer>
-    </main>
 
     <script>
-        // UPDATE YOUR PHONE NUMBER HERE
-        const myNumber = "918522984575"; 
+        const categories = [
+            "Fiction", "Non-Fiction", "Novels", "Short Stories", "Kids", 
+            "Comics & Graphic Novels", "Education", "Text books", "Reference", 
+            "Technology", "Programming", "Data Science", "Business & Finance", 
+            "Self-Help", "Motivation", "Biography & Memoir", "Science", 
+            "Mathematics", "History", "Geography", "Languages", "Literature", 
+            "Research Papers", "Journals", "Magazines", "Career Guidance"
+        ];
 
-        document.querySelectorAll('.btn-wa').forEach(link => {
-            link.href = link.href.replace("918522984575", myNumber);
-        });
+        function renderItems(filter = "") {
+            const container = document.getElementById('categoryContainer');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            // Toggle Nav Buttons
+            document.getElementById('logoutBtn').style.display = isLoggedIn ? 'block' : 'none';
+            document.getElementById('loginBtn').style.display = isLoggedIn ? 'none' : 'block';
 
-        // SEARCH FUNCTION
-        document.querySelector('.search-bar').addEventListener('keyup', (e) => {
-            let term = e.target.value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {
-                let text = card.textContent.toLowerCase();
-                card.style.display = text.includes(term) ? "flex" : "none";
+            container.innerHTML = "";
+            
+            const filtered = categories.filter(item => 
+                item.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            filtered.forEach(cat => {
+                const link = document.createElement('a');
+                link.className = 'cat-item';
+                
+                // --- AUTH LOGIC ---
+                if (isLoggedIn) {
+                    link.href = `category.html?type=${encodeURIComponent(cat)}`;
+                } else {
+                    link.href = `auth.html?redirect=${encodeURIComponent(cat)}`;
+                }
+                
+                link.innerHTML = `
+                    <div class="cat-icon">📚</div>
+                    <div class="cat-info">
+                        <h3>${cat}</h3>
+                        <p>Access specialized files and resources</p>
+                    </div>
+                    <div class="cat-arrow">BROWSE →</div>
+                `;
+                container.appendChild(link);
             });
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.reload();
+        }
+
+        // Search trigger
+        document.getElementById('catSearch').addEventListener('input', (e) => {
+            renderItems(e.target.value);
         });
+
+        // Run on load
+        window.onload = () => renderItems();
     </script>
 </body>
 </html>
