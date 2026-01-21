@@ -1,5 +1,117 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reader | SD24</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* 1. MATCHING YOUR WEBSITE STYLE */
+        body { 
+            background-color: #f4f1ea; 
+            font-family: 'Georgia', serif; 
+            line-height: 1.6; 
+            padding: 100px 10% 50px; 
+            color: #2c2c2c;
+            user-select: none; /* Security to prevent text copying */
+        }
+
+        /* Character names pop in Dark Red (matching your previous request) */
+        b, strong { 
+            color: #8b0000; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        /* FIXED: Normal spacing without the vertical line error */
+        p { 
+            margin-bottom: 25px; 
+            border: none; /* Removes the vertical line */
+            padding-left: 0; 
+        }
+
+        /* 2. NAVIGATION HEADER (Purple Website Style) */
+        .nav-header { 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; 
+            background: rgba(244, 241, 234, 0.95); 
+            backdrop-filter: blur(10px);
+            padding: 15px 5%; 
+            border-bottom: 1px solid rgba(0,0,0,0.1); 
+            z-index: 9999; 
+            display: flex;
+            align-items: center;
+        }
+
+        .back-link { 
+            color: white !important; 
+            background: #6366f1; /* Your signature purple website color */
+            text-decoration: none; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700; 
+            padding: 8px 25px; 
+            border-radius: 50px; /* Modern Pill shape */
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-link:hover { 
+            background: #4f46e5; 
+            transform: translateX(-3px);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+        }
+
+        h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; margin-bottom: 20px; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="nav-header">
+        <a href="javascript:history.back()" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back
+        </a>
+    </div>
+
+    <main>
+        <h1>The Tragedy of Romeo and Juliet</h1>
+        
+        <p><strong>TITLE:</strong> Romeo and Juliet</p>
+        <p><strong>AUTHOR:</strong> William Shakespeare</p>
+        
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 30px 0;">
+
+        <p><b>ROMEO:</b> But, soft! what light through yonder window breaks?</p>
+        <p><b>JULIET:</b> O Romeo, Romeo! wherefore art thou Romeo?</p>
+    </main>
+
+    <script>
+        // Security logic to protect your content
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 80 || e.keyCode === 85)) return false;
+        };
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
 <html lang="en"><head>
+<style>
+  body { background-color: #f4f1ea; font-family: 'Georgia', serif; line-height: 1.6; padding: 50px; }
+  /* This makes the character names pop */
+  b, strong { color: #8b0000; text-transform: uppercase; letter-spacing: 1px; }
+  /* This adds space between speakers */
+  p { margin-bottom: 20px; border-left: 3px solid #ccc; padding-left: 15px; }
+</style>
+
 <meta charset="utf-8"><style>
 #pg-header div, #pg-footer div {
     all: initial;

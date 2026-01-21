@@ -1,0 +1,65 @@
+/* GLOBAL MOBILE-FIRST STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --primary: #6366f1;
+    --bg-dark: #0b0e14;
+    --card-bg: #161a23;
+    --text-main: #f8fafc;
+    --paper: #f4f1ea;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevents side-scrolling on mobile */
+}
+
+/* RESPONSIVE GRID FOR LIBRARY & CATEGORY */
+.container {
+    width: 100%;
+    padding: 80px 5% 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* MOBILE CARD ADJUSTMENTS */
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%; /* Full width on mobile */
+    transition: transform 0.3s;
+}
+
+/* BUTTONS AS TOUCH TARGETS */
+.btn-open, .category-btn, .login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px; /* Easy for thumbs to hit */
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+/* MEDIA QUERY FOR TABLETS & DESKTOPS */
+@media (min-width: 768px) {
+    .container {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 100px 10% 50px;
+    }
+    .btn-open { width: auto; padding: 10px 30px; }
+}

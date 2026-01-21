@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="book-list" class="container">
+        </div>
+
+    <script src="js/books.js"></script>
+    <script>
+        // Use the filtered list from your JS
+        const container = document.getElementById('book-list');
+        // Example injection:
+        filteredBooks.forEach(book => {
+            container.innerHTML += `
+                <div class="card">
+                    <img src="${book.img}" style="width:100%; border-radius:8px;">
+                    <h3>${book.title}</h3>
+                    <a href="${book.link}?from=${selectedType}" class="btn-open">Read Now</a>
+                </div>
+            `;
+        });
+    </script>
+</body>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SD24 | Digital Library - Browse</title>

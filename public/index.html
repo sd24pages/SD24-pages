@@ -3,121 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD24 Pages | Premium Study Intelligence</title>
+    <title>SD24 | Premium Digital Library</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* CORE THEME - Matching Library & Contact */
         :root {
-            --bg: #05070a;
             --primary: #6366f1;
-            --secondary: #a855f7;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --text-main: #ffffff;
+            --bg: #0b0e14;
+            --text-main: #f8fafc;
             --text-dim: #94a3b8;
+            --card: #161a23;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        .glow { position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%); top: -100px; right: -100px; z-index: -1; }
 
-        /* Navigation - UPDATED */
-        nav { padding: 30px 0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; backdrop-filter: blur(10px); z-index: 1000; }
-        .logo { font-size: 22px; font-weight: 800; letter-spacing: -1px; text-decoration: none; color: white; }
-        .logo span { color: var(--primary); }
-        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 30px; font-size: 14px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
 
-        /* Hero */
-        .hero { padding: 120px 0 80px; text-align: center; }
-        .badge { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); color: #818cf8; padding: 8px 20px; border-radius: 100px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 24px; }
-        h1 { font-size: clamp(40px, 8vw, 70px); font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
-        .gradient-text { background: linear-gradient(90deg, #6366f1, #a855f7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-main { background: var(--primary); color: white; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-weight: 700; display: inline-block; transition: 0.3s; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3); }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5); }
+        /* HERO SECTION */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 5%;
+            background: radial-gradient(circle at top, #1e293b 0%, #0b0e14 100%);
+        }
 
-        /* Steps Section - NEW */
-        .steps { padding: 80px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .step-card { text-align: center; padding: 30px; background: var(--card-bg); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .step-num { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-weight: 800; }
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
 
-        /* Footer - UPDATED */
-        footer { padding: 80px 0 40px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
-        .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
-        .footer-col a { display: block; color: var(--text-dim); text-decoration: none; margin-bottom: 10px; font-size: 14px; }
-        .footer-col a:hover { color: white; }
-        .copyright { text-align: center; color: #4b5563; font-size: 13px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+        #typewriter { color: var(--primary); border-right: 3px solid var(--primary); padding-right: 5px; }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: var(--text-dim);
+            max-width: 700px;
+            margin-bottom: 50px;
+        }
+
+        /* RESPONSIVE CAROUSEL */
+        .carousel {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+            justify-content: flex-start; /* Default for mobile */
+        }
+        
+        /* Laptop fix for Carousel */
+        @media (min-width: 1024px) {
+            .carousel { justify-content: center; overflow: hidden; }
+        }
+
+        .book-card {
+            flex: 0 0 200px;
+            height: 300px;
+            background: var(--card);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .book-card img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
+        .book-card:hover { transform: translateY(-10px); }
+
+        /* FEATURED SECTION (Responsive Flex) */
+        .featured {
+            display: flex;
+            flex-direction: column; /* Mobile first */
+            padding: 80px 8%;
+            gap: 40px;
+            align-items: center;
+            background: #0f172a;
+        }
+
+        /* Laptop fix for Featured Section */
+        @media (min-width: 768px) {
+            .featured { flex-direction: row; text-align: left; }
+            .featured-img, .featured-text { flex: 1; }
+        }
+
+        .featured-img img { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .featured-text h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 20px; }
+        .featured-text p { color: var(--text-dim); margin-bottom: 30px; font-size: 1.1rem; }
+
+        /* CTA */
+        .cta-area { padding: 100px 5%; text-align: center; }
+        .main-btn {
+            background: var(--primary);
+            color: white;
+            padding: 20px 50px;
+            text-decoration: none;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
 
-    <div class="glow"></div>
+    <section class="hero">
+        <h1>Explore <span id="typewriter"></span></h1>
+        <p>A premium digital reading experience. Optimized for your mobile, tailored for your laptop.</p>
+        
+        <div class="carousel">
+            <div class="book-card"><img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600"></div>
+            <div class="book-card"><img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600"></div>
+            <div class="book-card"><img src="https://images.unsplash.com/photo-1589998059171-988d887df646?w=600"></div>
+        </div>
+    </section>
 
-    <div class="container">
-        <nav>
-            <a href="index.html" class="logo">SD24<span>PAGES</span></a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="library.html">Library</a>
-                <a href="contact.html">Support</a> </div>
-        </nav>
+    <section class="featured">
+        <div class="featured-img">
+            <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=800">
+        </div>
+        <div class="featured-text">
+            <h2>The Art of Narrative</h2>
+            <p>Every story is formatted to provide maximum focus. Whether you are on a 13-inch laptop or a 6-inch phone, the typography remains crystal clear.</p>
+            <a href="library.html" class="main-btn">Enter Library Room</a>
+        </div>
+    </section>
 
-        <header class="hero">
-            <span class="badge">New: 2026 Curriculum Notes</span>
-            <h1>Level up with <br><span class="gradient-text">Precision Notes.</span></h1>
-            <p>Skip the fluff. Get high-quality, structured PDF notes designed for rapid learning and exam success.</p>
-            <a href="library.html" class="btn-main">Browse Full Library</a>
-        </header>
+    <script>
+        const textElement = document.getElementById("typewriter");
+        const words = ["Classics.", "Fiction.", "Anytime.", "Worlds."];
+        let wordIndex = 0, charIndex = 0, isDeleting = false;
 
-        <section class="steps">
-            <div class="section-title">
-                <h2>How to Get Your Notes</h2>
-            </div>
-            <div class="step-grid">
-                <div class="step-card">
-                    <div class="step-num">1</div>
-                    <h4>Pick Subject</h4>
-                    <p>Choose your PDF from our extensive library.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">2</div>
-                    <h4>Pay via UPI</h4>
-                    <p>Secure, instant payments using any UPI app.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">3</div>
-                    <h4>Instant Access</h4>
-                    <p>Download your PDF immediately after payment.</p>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-content">
-                <div class="footer-col" style="flex: 2;">
-                    <a href="#" class="logo">SD24<span>PAGES</span></a>
-                    <p style="color: var(--text-dim); margin-top: 15px; max-width: 300px;">Providing students with the best digital study tools since 2024.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Resources</h4>
-                    <a href="library.html">Browse Library</a>
-                    <a href="library.html">Free Samples</a>
-                    <a href="contact.html">Report Issue</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Company</h4>
-                    <a href="contact.html">Contact Us</a> <a href="terms.html">Terms of Service</a> <a href="terms.html">Privacy Policy</a>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2026 SD24 Pages. All rights reserved. Professional PDF Education Assets.
-            </div>
-        </footer>
-    </div>
-
+        function type() {
+            const currentWord = words[wordIndex];
+            textElement.textContent = isDeleting ? currentWord.substring(0, charIndex--) : currentWord.substring(0, charIndex++);
+            let typeSpeed = isDeleting ? 100 : 200;
+            if (!isDeleting && charIndex === currentWord.length + 1) { isDeleting = true; typeSpeed = 2000; }
+            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener("DOMContentLoaded", type);
+    </script>
 </body>
 </html>
