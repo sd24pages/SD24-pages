@@ -1,203 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div id="book-list" class="container">
-        </div>
-
-    <script src="js/books.js"></script>
-    <script>
-        // Use the filtered list from your JS
-        const container = document.getElementById('book-list');
-        // Example injection:
-        filteredBooks.forEach(book => {
-            container.innerHTML += `
-                <div class="card">
-                    <img src="${book.img}" style="width:100%; border-radius:8px;">
-                    <h3>${book.title}</h3>
-                    <a href="${book.link}?from=${selectedType}" class="btn-open">Read Now</a>
-                </div>
-            `;
-        });
-    </script>
-</body>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD24 | Digital Library - Browse</title>
-    <link // href="${book.link}?from=${encodeURIComponent(selectedType)}" class="btn-open">
+    <title>SD24 LIB | Library Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     
-    <script src="js/books.js"></script>
-
     <style>
         :root { 
             --bg: #0b0e14; 
             --primary: #6366f1; 
-            --row-bg: #161a23; 
+            --card-bg: #161a23; 
             --border: rgba(255, 255, 255, 0.08); 
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--bg); 
-            color: white; 
-            min-height: 100vh;
+            --text-dim: #94a3b8;
         }
 
-        /* Navbar with Merged Style Go-Back Button */
-        .navbar {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* HEADER & NAVIGATION */
+        .nav-bar {
+            padding: 20px 8%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 8%;
             border-bottom: 1px solid var(--border);
             background: rgba(11, 14, 20, 0.9);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
         }
 
-        .back-link-main {
+        .back-btn {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            text-decoration: none;
-            color: #94a3b8;
-            font-weight: 700;
-            font-size: 14px;
-            transition: 0.2s;
+            transition: 0.3s;
         }
-        .back-link-main:hover { color: #ffffff; }
+        .back-btn:hover { color: white; }
 
-        /* Main Container */
-        .container { max-width: 900px; margin: 40px auto; padding: 0 25px; }
-        
-        .cat-title-area { margin-bottom: 40px; }
-        .cat-title-area h1 { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
-        .cat-title-area p { color: #94a3b8; margin-top: 5px; }
+        /* BIG SCREEN CENTERING */
+        .page-wrapper {
+            max-width: 1100px; /* Prevents content from being too wide */
+            margin: 0 auto;    /* Centers the whole page */
+            padding: 60px 25px;
+        }
 
-        /* Book Rows */
-        .book-list { display: flex; flex-direction: column; gap: 20px; }
-        
+        .category-title-section { margin-bottom: 50px; }
+        .category-title-section h1 { font-size: 3rem; color: var(--primary); margin-bottom: 10px; }
+        .category-title-section p { color: var(--text-dim); font-size: 1.1rem; }
+
+        /* GRID FOR MULTIPLE BOOKS */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        /* EVERY BOOK CARD DESIGN */
         .book-card {
             display: flex;
-            background: var(--row-bg);
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
             transition: 0.3s ease;
+            height: 240px; /* Consistent height for every book */
         }
-        .book-card:hover { border-color: var(--primary); transform: translateY(-3px); }
 
-        .book-img-box {
-            width: 140px;
-            min-height: 180px;
+        .book-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+        .book-cover {
+            flex: 0 0 150px; /* Locked width so text never compresses cover */
             background: #1c212c;
         }
-        .book-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .book-cover img { width: 100%; height: 100%; object-fit: cover; }
 
-        .book-info {
+        .book-details {
             flex: 1;
             padding: 25px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-width: 0; /* Important for word wrapping */
         }
 
-        .book-info h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
-        .book-info p { font-size: 0.9rem; color: #94a3b8; line-height: 1.5; margin-bottom: 15px; }
+        .book-details h2 { font-size: 1.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 5px; }
+        .book-details p { font-size: 0.95rem; color: var(--text-dim); margin-bottom: 15px; }
 
-        .btn-open {
-            display: inline-block;
+        .read-btn {
             background: var(--primary);
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 25px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 14px;
-            text-align: center;
+            font-size: 0.9rem;
             width: fit-content;
-        }
-        .btn-locked { background: #334155; }
-
-        .empty-state {
             text-align: center;
-            padding: 80px 20px;
-            border: 2px dashed #1c212c;
-            border-radius: 24px;
-            color: #475569;
+        }
+
+        @media (max-width: 600px) {
+            .book-grid { grid-template-columns: 1fr; }
+            .book-card { height: auto; min-height: 180px; }
+            .book-cover { flex: 0 0 110px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="library.html" class="back-link-main">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            Back to Catalog
-        </a>
-        <div style="font-weight: 800; color: var(--primary); letter-spacing: -1px;">SD24</div>
+    <nav class="nav-bar">
+        <a href="library.html" class="back-btn">← Back</a>
+        <div style="font-weight: 800; color: var(--primary);">SD24 LIB</div>
     </nav>
 
-    <div class="container">
-        <div class="cat-title-area">
-            <h1 id="categoryDisplay">Loading Category...</h1>
+    <div class="page-wrapper">
+        <div class="category-title-section">
+            <h1 id="categoryName">Library</h1>
             <p>Digital collection and specialized resources.</p>
         </div>
 
-        <div class="book-list" id="bookContainer">
-            </div>
+        <div class="book-grid" id="bookContainer"></div>
     </div>
 
+    <script src="js/books.js"></script>
     <script>
-        // 1. Initialize logic after page loads
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             const selectedType = params.get('type');
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
-            // Set the Title
-            document.getElementById('categoryDisplay').innerText = selectedType || "Library";
+            document.getElementById('categoryName').innerText = selectedType || "Novels";
 
             const container = document.getElementById('bookContainer');
 
-            // 2. CHECK: Does the database exist?
-            // "myBooksDatabase" must be defined in js/books.js
             if (typeof myBooksDatabase !== 'undefined') {
-                const filteredBooks = myBooksDatabase.filter(b => b.category === selectedType);
+                const filteredBooks = myBooksDatabase.filter(book => 
+    book.categories && book.categories.includes(selectedType)
+);
 
                 if (filteredBooks.length > 0) {
+                    // This generates the card for EVERY book in the category
                     container.innerHTML = filteredBooks.map(book => `
                         <div class="book-card">
-                            <div class="book-img-box">
-                                <img src="${book.img}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/140x180?text=No+Cover'">
+                            <div class="book-cover">
+                                <img src="${book.img}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x240?text=No+Cover'">
                             </div>
-                            <div class="book-info">
+                            <div class="book-details">
                                 <div>
                                     <h2>${book.title}</h2>
-                                    <p>${book.desc}</p>
+                                    <p>${book.desc || 'Shakespeare\'s timeless masterpiece.'}</p>
                                 </div>
-                                ${isLoggedIn 
-                                    ? `<a href="${book.link}" class="btn-open">Read Online →</a>` 
-                                    : `<a href="auth.html?redirect=${encodeURIComponent(selectedType)}" class="btn-open btn-locked">Login to Unlock</a>`
-                                }
+                                <a href="${book.link}" class="read-btn">Read Online →</a>
                             </div>
                         </div>
                     `).join('');
                 } else {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <h2>No books in "${selectedType}" yet.</h2>
-                            <p>We are currently uploading new resources to this shelf.</p>
-                        </div>
-                    `;
+                    container.innerHTML = "<p>No books available in this section yet.</p>";
                 }
-            } else {
-                // Troubleshooting message if js/books.js fails to load
-                container.innerHTML = `<div class='empty-state'><h2>Error</h2><p>Could not find the book database in js/books.js</p></div>`;
             }
         };
     </script>
