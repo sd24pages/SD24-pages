@@ -1,7 +1,7 @@
 const myBooksDatabase = [
     {
         title: "The Tragedy of Romeo and Juliet",
-        categories: ["Novels", "fiction"], 
+        categories: ["Novels", "Fiction"], 
         img: "https://images.unsplash.com/photo-1589998059171-988d887df646?w=400",
         desc: "Shakespeare's timeless masterpiece.",
         link: "vault/romeo_juliet.html"
