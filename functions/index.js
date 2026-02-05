@@ -88,61 +88,79 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
 exports.sendVerificationEmail = functions.https.onCall(async (data, context) => {
   const { email, displayName } = data;
 
-  if (!transporter) {
-    throw new functions.https.HttpsError('failed-precondition', 
-      'Email service is not configured. Contact support for assistance.');
-  }
-
-  const mailOptions = {
-    from: process.env.GMAIL_USER,
-    to: email,
-    subject: 'Verify Your SD24 LIB Account',
-    html: `
-      <div style="font-family: 'Plus Jakarta Sans', Arial; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 40px; text-align: center; border-radius: 12px 12px 0 0;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Verify Your Email</h1>
-        </div>
-        <div style="background: #f8fafc; padding: 40px; border-radius: 0 0 12px 12px;">
-          <p style="color: #1f2937; font-size: 16px; line-height: 1.6;">
-            Hi ${displayName || 'User'},
-          </p>
-          <p style="color: #1f2937; font-size: 16px; line-height: 1.6;">
-            Thank you for registering with SD24 LIB. To complete your account setup and start exploring our digital library, please verify your email address.
-          </p>
-          <div style="text-align: center; margin: 40px 0;">
-            <p style="color: #6b7280; font-size: 14px; margin-bottom: 15px;">Click the button below to verify your email:</p>
-            <a href="https://sd24lib.com/verify?email=${encodeURIComponent(email)}" 
-               style="display: inline-block; background: #6366f1; color: white; padding: 14px 40px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-              Verify Email Address
-            </a>
-          </div>
-          <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 30px 0;">
-            Or copy and paste this link in your browser:<br/>
-            <code style="background: #e5e7eb; padding: 8px 12px; border-radius: 4px; display: inline-block; margin-top: 10px; word-break: break-all;">
-              https://sd24lib.com/verify?email=${encodeURIComponent(email)}
-            </code>
-          </p>
-          <p style="color: #9ca3af; font-size: 12px; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 20px;">
-            This link will expire in 24 hours. If you didn't create this account, please ignore this email.
-          </p>
-        </div>
-      </div>
-    `
-  };
-
-  if (!transporter) {
-    throw new functions.https.HttpsError('failed-precondition', 
-      'Email service is not configured. Contact support for assistance.');
-  }
-
   try {
-    console.log('📧 Sending verification email to:', email);
-    await transporter.sendMail(mailOptions);
-    console.log('✓ Verification email sent to:', email);
-    return { success: true, message: 'Verification email sent' };
+    // Get user to send verification email
+    const user = await admin.auth().getUserByEmail(email);
+    
+    // Generate Firebase verification link (this is the official way)
+    const verificationLink = await admin.auth().generateEmailVerificationLink(email);
+    
+    console.log('🔗 Generated verification link for:', email);
+
+    if (!transporter) {
+      console.warn('⚠️ Email service not available but generating verification link');
+      return { 
+        success: true, 
+        message: 'Verification link generated. Email service unavailable but you can manually verify.',
+        verificationLink: verificationLink
+      };
+    }
+
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: 'Verify Your SD24 LIB Account',
+      html: `
+        <div style="font-family: 'Plus Jakarta Sans', Arial; max-width: 600px; margin: 0 auto;">
+          <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 40px; text-align: center; border-radius: 12px 12px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">Verify Your Email</h1>
+          </div>
+          <div style="background: #f8fafc; padding: 40px; border-radius: 0 0 12px 12px;">
+            <p style="color: #1f2937; font-size: 16px; line-height: 1.6;">
+              Hi ${displayName || 'User'},
+            </p>
+            <p style="color: #1f2937; font-size: 16px; line-height: 1.6;">
+              Thank you for registering with SD24 LIB. To complete your account setup and start exploring our digital library, please verify your email address.
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+              <p style="color: #6b7280; font-size: 14px; margin-bottom: 15px;">Click the button below to verify your email:</p>
+              <a href="${verificationLink}" 
+                 style="display: inline-block; background: #6366f1; color: white; padding: 14px 40px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                Verify Email Address
+              </a>
+            </div>
+            <p style="color: #6b7280; font-size: 14px; text-align: center; margin: 30px 0;">
+              Or copy and paste this link in your browser:<br/>
+              <code style="background: #e5e7eb; padding: 8px 12px; border-radius: 4px; display: inline-block; margin-top: 10px; word-break: break-all; font-size: 11px;">
+                ${verificationLink}
+              </code>
+            </p>
+            <p style="color: #9ca3af; font-size: 12px; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 20px;">
+              This link will expire in 24 hours. If you didn't create this account, please ignore this email.
+            </p>
+          </div>
+        </div>
+      `
+    };
+
+    try {
+      console.log('📧 Sending verification email to:', email);
+      await transporter.sendMail(mailOptions);
+      console.log('✓ Verification email sent to:', email);
+      return { success: true, message: 'Verification email sent' };
+    } catch (emailError) {
+      console.error('❌ Error sending verification email to', email, ':', emailError.message);
+      // Don't throw - account is created, email just failed to send
+      console.log('⚠️ Falling back to verification link generation');
+      return { 
+        success: true, 
+        message: 'Account created. Email sending failed but you can use the verification link below.',
+        verificationLink: verificationLink
+      };
+    }
   } catch (error) {
-    console.error('❌ Error sending verification email to', email, ':', error.message);
-    throw new functions.https.HttpsError('internal', 'Failed to send verification email. Please try again.');
+    console.error('❌ Error in sendVerificationEmail:', error.message);
+    throw new functions.https.HttpsError('internal', 'Failed to process verification. Please try again.');
   }
 });
 
@@ -151,13 +169,20 @@ exports.sendLoginOTP = functions.https.onCall(async (data, context) => {
   const { email } = data;
 
   try {
+    console.log('🔑 Login attempt for:', email);
+    
     // Verify user exists and email is registered
     const user = await admin.auth().getUserByEmail(email);
+    console.log('👤 User found:', email, 'EmailVerified:', user.emailVerified);
     
     // Check if email is verified
     if (!user.emailVerified) {
-      throw new functions.https.HttpsError('permission-denied', 'Email not verified. Please verify your email first.');
+      console.warn('⚠️ Email not verified for:', email);
+      throw new functions.https.HttpsError('permission-denied', 
+        'Email not verified. Please click the verification link in your email first. Check your spam folder if you don\'t see it.');
     }
+    
+    console.log('✓ Email verified for:', email, 'Sending OTP...');
     
     // Generate OTP
     const otp = generateOTP();
@@ -172,6 +197,15 @@ exports.sendLoginOTP = functions.https.onCall(async (data, context) => {
     });
 
     // Send OTP via email
+    if (!transporter) {
+      console.warn('⚠️ Email service not available, but OTP stored in database');
+      return { 
+        success: true, 
+        message: 'OTP generated. Email service unavailable. Check your email or contact support.',
+        expiresIn: 300
+      };
+    }
+
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: email,
@@ -204,15 +238,28 @@ exports.sendLoginOTP = functions.https.onCall(async (data, context) => {
       `
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      console.log('📧 Sending OTP email to:', email);
+      await transporter.sendMail(mailOptions);
+      console.log('✓ OTP email sent to:', email);
+    } catch (emailError) {
+      console.error('❌ OTP email send error:', emailError.message);
+      console.log('⚠️ OTP stored in database. User can use it or request new one.');
+    }
+
     return { 
       success: true, 
       message: 'OTP sent to your email',
       expiresIn: 300 // 5 minutes in seconds
     };
   } catch (error) {
-    console.error('Error sending OTP:', error);
-    throw new functions.https.HttpsError('not-found', 'User not found');
+    console.error('❌ Error in sendLoginOTP:', error.message);
+    
+    if (error.code) {
+      throw error; // Re-throw HttpsError
+    }
+    
+    throw new functions.https.HttpsError('internal', 'Failed to send OTP. Please try again.');
   }
 });
 
@@ -221,40 +268,57 @@ exports.verifyLoginOTP = functions.https.onCall(async (data, context) => {
   const { email, otp } = data;
 
   try {
+    console.log('🔐 OTP verification attempt for:', email);
+    
     // Verify user exists and email is verified
     const user = await admin.auth().getUserByEmail(email);
+    console.log('👤 User found:', email, 'EmailVerified:', user.emailVerified);
+    
     if (!user.emailVerified) {
-      throw new functions.https.HttpsError('permission-denied', 'Email not verified');
+      console.warn('⚠️ Email not verified during OTP verification:', email);
+      throw new functions.https.HttpsError('permission-denied', 
+        'Email not verified. Please click the verification link in your email first.');
     }
 
     const otpDoc = await admin.firestore().collection('otps').doc(email).get();
 
     if (!otpDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'OTP not found or expired');
+      console.warn('❌ No OTP found for:', email);
+      throw new functions.https.HttpsError('not-found', 
+        'OTP not found. Please request a new login code.');
     }
 
     const otpData = otpDoc.data();
 
     // Check if OTP expired
     if (Date.now() > otpData.expiresAt) {
+      console.warn('❌ OTP expired for:', email);
       await otpDoc.ref.delete();
-      throw new functions.https.HttpsError('unauthenticated', 'OTP has expired');
+      throw new functions.https.HttpsError('unauthenticated', 
+        'OTP has expired. Please request a new login code.');
     }
 
     // Check attempts
-    if (otpData.attempts >= 3) {
+    const attempts = otpData.attempts || 0;
+    if (attempts >= 5) {
+      console.warn('❌ Too many OTP attempts for:', email);
       await otpDoc.ref.delete();
-      throw new functions.https.HttpsError('permission-denied', 'Too many failed attempts. Please request a new OTP.');
+      throw new functions.https.HttpsError('permission-denied', 
+        'Too many failed attempts. Please request a new login code.');
     }
 
     // Verify OTP
     if (otpData.otp !== otp) {
+      console.warn(`⚠️ Invalid OTP for ${email}. Attempts: ${attempts + 1}`);
       await otpDoc.ref.update({
         attempts: admin.firestore.FieldValue.increment(1)
       });
-      throw new functions.https.HttpsError('unauthenticated', 'Invalid OTP');
+      throw new functions.https.HttpsError('unauthenticated', 
+        `Invalid OTP. ${5 - (attempts + 1)} attempts remaining.`);
     }
 
+    console.log('✓ OTP verified for:', email);
+    
     // OTP verified - delete it
     await otpDoc.ref.delete();
 
@@ -266,6 +330,7 @@ exports.verifyLoginOTP = functions.https.onCall(async (data, context) => {
 
     // Create custom token for login
     const customToken = await admin.auth().createCustomToken(user.uid);
+    console.log('✓ Login token created for:', email);
 
     return {
       success: true,
@@ -275,8 +340,14 @@ exports.verifyLoginOTP = functions.https.onCall(async (data, context) => {
       email: user.email
     };
   } catch (error) {
-    console.error('Error verifying OTP:', error);
-    throw error;
+    console.error('❌ Error verifying OTP:', error.message);
+    
+    if (error.code) {
+      throw error; // Re-throw HttpsError
+    }
+    
+    throw new functions.https.HttpsError('internal', 
+      'OTP verification failed. Please try again.');
   }
 });
 
@@ -292,3 +363,97 @@ exports.sendEmailVerificationLink = functions.https.onCall(async (data, context)
     throw new functions.https.HttpsError('internal', 'Failed to generate verification link');
   }
 });
+
+// Resend Verification Email
+exports.resendVerificationEmail = functions.https.onCall(async (data, context) => {
+  const { email } = data;
+
+  try {
+    console.log('📧 Resending verification email to:', email);
+    
+    // Get user
+    const user = await admin.auth().getUserByEmail(email);
+    
+    // If already verified, no need to resend
+    if (user.emailVerified) {
+      console.log('✓ Email already verified for:', email);
+      return {
+        success: true,
+        message: 'Email already verified. You can now login.',
+        alreadyVerified: true
+      };
+    }
+    
+    // Generate official Firebase verification link
+    const verificationLink = await admin.auth().generateEmailVerificationLink(email);
+    
+    console.log('🔗 Verification link generated for:', email);
+    
+    // Send verification email
+    if (!transporter) {
+      console.warn('⚠️ Email service not available for resend');
+      return {
+        success: true,
+        message: 'Email service unavailable. Please try again later.',
+        link: verificationLink
+      };
+    }
+
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: 'Verify Your Email - SD24 LIB',
+      html: `
+        <div style="font-family: 'Plus Jakarta Sans', Arial; max-width: 600px; margin: 0 auto;">
+          <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 40px; text-align: center; border-radius: 12px 12px 0 0;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">Verify Your Email</h1>
+          </div>
+          <div style="background: #f8fafc; padding: 40px; border-radius: 0 0 12px 12px;">
+            <p style="color: #1f2937; font-size: 16px; line-height: 1.6;">
+              Click the button below to verify your email address and activate your SD24 LIB account:
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+              <a href="${verificationLink}" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                Verify Email Address
+              </a>
+            </div>
+            <p style="color: #6b7280; font-size: 14px; margin-top: 20px;">
+              Or copy and paste this link in your browser:
+            </p>
+            <p style="background: #e5e7eb; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 12px; color: #374151;">
+              ${verificationLink}
+            </p>
+            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin-top: 30px; border-left: 4px solid #6366f1;">
+              <p style="color: #374151; font-size: 14px; margin: 0;">
+                <strong>💡 Tip:</strong> After verifying your email, you'll be able to login using your email and password.
+              </p>
+            </div>
+            <p style="color: #9ca3af; font-size: 12px; margin-top: 30px; border-top: 1px solid #e5e7eb; padding-top: 20px;">
+              If you didn't create this account, please ignore this email.
+            </p>
+          </div>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('✓ Verification email resent to:', email);
+    
+    return {
+      success: true,
+      message: 'Verification email sent. Please check your inbox.',
+      link: verificationLink
+    };
+  } catch (error) {
+    console.error('❌ Error resending verification email:', error.message);
+    
+    if (error.code === 'auth/user-not-found') {
+      throw new functions.https.HttpsError('not-found', 
+        'User not found. Please sign up first.');
+    }
+    
+    throw new functions.https.HttpsError('internal', 
+      'Failed to resend verification email. Please try again.');
+  }
+});
+
