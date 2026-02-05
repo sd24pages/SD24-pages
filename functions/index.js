@@ -5,13 +5,26 @@ const nodemailer = require('nodemailer');
 admin.initializeApp();
 
 // Email configuration
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASSWORD
+const getTransporter = () => {
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPassword = process.env.GMAIL_PASSWORD;
+  
+  if (!gmailUser || !gmailPassword) {
+    console.warn('⚠️ Gmail credentials not configured. Email features disabled.');
+    console.warn('Set GMAIL_USER and GMAIL_PASSWORD in environment variables.');
+    return null;
   }
-});
+  
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: gmailUser,
+      pass: gmailPassword
+    }
+  });
+};
+
+const transporter = getTransporter();
 
 // Generate OTP (6 digits)
 function generateOTP() {
@@ -20,6 +33,13 @@ function generateOTP() {
 
 // Send Welcome Email
 exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
+  console.log('🎉 New user created:', user.email);
+  
+  if (!transporter) {
+    console.warn('⚠️ Email service not available. Welcome email skipped for:', user.email);
+    return;
+  }
+  
   const mailOptions = {
     from: process.env.GMAIL_USER,
     to: user.email,
@@ -58,15 +78,20 @@ exports.sendWelcomeEmail = functions.auth.user().onCreate(async (user) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log('Welcome email sent to:', user.email);
+    console.log('✓ Welcome email sent to:', user.email);
   } catch (error) {
-    console.error('Error sending welcome email:', error);
+    console.error('❌ Error sending welcome email to', user.email, ':', error.message);
   }
 });
 
 // Send Verification Email
 exports.sendVerificationEmail = functions.https.onCall(async (data, context) => {
   const { email, displayName } = data;
+
+  if (!transporter) {
+    throw new functions.https.HttpsError('failed-precondition', 
+      'Email service is not configured. Contact support for assistance.');
+  }
 
   const mailOptions = {
     from: process.env.GMAIL_USER,
@@ -106,11 +131,15 @@ exports.sendVerificationEmail = functions.https.onCall(async (data, context) => 
   };
 
   try {
+    console.log('📧 Sending verification email to:', email);
     await transporter.sendMail(mailOptions);
+    console.log('✓ Verification email sent to:', email);
     return { success: true, message: 'Verification email sent' };
   } catch (error) {
     console.error('Error sending verification email:', error);
-    throw new functions.https.HttpsError('internal', 'Failed to send verification email');
+  } catch (error) {
+    console.error('❌ Error sending verification email to', email, ':', error.message);
+    throw new functions.https.HttpsError('internal', 'Failed to send verification email. Please try again.');
   }
 });
 

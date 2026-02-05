@@ -616,14 +616,22 @@
                 switchForm('verify_email');
 
             } catch (error) {
+                console.error('Sign up error:', error);
                 let message = 'Sign up failed. Please try again.';
+                
                 if (error.code === 'auth/email-already-in-use') {
                     message = 'This email is already registered. Please login instead.';
                 } else if (error.code === 'auth/weak-password') {
                     message = 'Password is too weak. Use at least 8 characters.';
                 } else if (error.code === 'auth/invalid-email') {
                     message = 'Please enter a valid email address.';
+                } else if (error.message && error.message.includes('Email service is not configured')) {
+                    message = 'Email service is temporarily unavailable. Account created but please contact support to enable emails.';
+                } else if (error.message) {
+                    message = error.message;
                 }
+                
+                console.log('User error message:', message);
                 showAlert('signup-alert', message, 'error');
             } finally {
                 btn.disabled = false;
