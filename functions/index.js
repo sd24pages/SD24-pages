@@ -130,13 +130,16 @@ exports.sendVerificationEmail = functions.https.onCall(async (data, context) => 
     `
   };
 
+  if (!transporter) {
+    throw new functions.https.HttpsError('failed-precondition', 
+      'Email service is not configured. Contact support for assistance.');
+  }
+
   try {
     console.log('📧 Sending verification email to:', email);
     await transporter.sendMail(mailOptions);
     console.log('✓ Verification email sent to:', email);
     return { success: true, message: 'Verification email sent' };
-  } catch (error) {
-    console.error('Error sending verification email:', error);
   } catch (error) {
     console.error('❌ Error sending verification email to', email, ':', error.message);
     throw new functions.https.HttpsError('internal', 'Failed to send verification email. Please try again.');
