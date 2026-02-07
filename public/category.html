@@ -126,8 +126,38 @@
     </div>
 
     <script src="js/books.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+
     <script>
-        window.onload = function() {
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqVqDhAqXmPy_7tZ8K_dL8mN5oP2qR3sT",
+            authDomain: "sd24pages-e149c.firebaseapp.com",
+            projectId: "sd24pages-e149c",
+            storageBucket: "sd24pages-e149c.appspot.com",
+            messagingSenderId: "237326369522",
+            appId: "1:237326369522:web:5a8b7c9d2e1f3a4b5c6d"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Check authentication status
+        auth.onAuthStateChanged((user) => {
+            if (!user || !user.emailVerified) {
+                // Not logged in or email not verified - redirect
+                window.location.href = "auth.html?redirect=" + encodeURIComponent(new URLSearchParams(window.location.search).get('type'));
+            } else {
+                // User is authenticated and verified
+                loadBooks();
+            }
+        });
+
+        function loadBooks() {
             const params = new URLSearchParams(window.location.search);
             const selectedType = params.get('type');
             document.getElementById('categoryName').innerText = selectedType || "Novels";
@@ -136,8 +166,8 @@
 
             if (typeof myBooksDatabase !== 'undefined') {
                 const filteredBooks = myBooksDatabase.filter(book => 
-    book.categories && book.categories.includes(selectedType)
-);
+                    book.categories && book.categories.includes(selectedType)
+                );
 
                 if (filteredBooks.length > 0) {
                     // This generates the card for EVERY book in the category
@@ -149,7 +179,7 @@
                             <div class="book-details">
                                 <div>
                                     <h2>${book.title}</h2>
-                                    <p>${book.desc || 'Shakespeare\'s timeless masterpiece.'}</p>
+                                    <p>${book.desc || 'A great read.'}</p>
                                 </div>
                                 <a href="${book.link}" class="read-btn">Read Online →</a>
                             </div>
@@ -159,7 +189,7 @@
                     container.innerHTML = "<p>No books available in this section yet.</p>";
                 }
             }
-        };
+        }
     </script>
 </body>
 </html>
