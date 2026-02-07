@@ -1,70 +1,199 @@
-# Getting Started with Create React App
+# SD24 LIB - Premium Digital Library
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive digital library application built with React and Firebase.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **User Authentication** - Email-based sign-up with verification and OTP login
+- **Cloud Functions** - Serverless backend for email notifications
+- **Responsive Design** - Mobile-first approach with modern UI
+- **Real-time Database** - Firebase Firestore integration
+- **Digital Library** - Browse and access premium digital books
 
-### `npm start`
+## 📋 Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js 18 or higher
+- npm or yarn
+- Firebase CLI (`npm install -g firebase-tools`)
+- An active Firebase project
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🔧 Setup Instructions
 
-### `npm test`
+### 1. Clone and Install Dependencies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# Install root dependencies
+npm install
 
-### `npm run build`
+# Install Cloud Functions dependencies
+cd functions
+npm install
+cd ..
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. Configure Firebase
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+# Login to Firebase
+firebase login
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Set your Firebase project
+firebase use sd24pages-e149c
+```
 
-### `npm run eject`
+### 3. Environment Variables
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Create a `functions/.env` file with your Gmail credentials:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```env
+GMAIL_USER=your-email@gmail.com
+GMAIL_PASSWORD=your-app-specific-password
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+To get a Gmail app password:
+1. Visit https://myaccount.google.com/
+2. Go to Security → App passwords
+3. Select "Mail" and "Windows Computer"
+4. Generate the password and use it in .env file
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Alternatively, set environment variables in Firebase Console:
 
-## Learn More
+```bash
+firebase functions:config:set gmail.user="your-email@gmail.com" gmail.password="your-password"
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 4. Build the React App
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run build
+```
 
-### Code Splitting
+This creates a `build/` directory with the production-ready app.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🚀 Deployment
 
-### Analyzing the Bundle Size
+### Deploy Everything
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+npm run deploy
+```
 
-### Making a Progressive Web App
+This deploys both the React app to Firebase Hosting and the Cloud Functions.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Deploy Only Functions
 
-### Advanced Configuration
+```bash
+npm run deploy:functions
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Deploy Only Hosting
 
-### Deployment
+```bash
+npm run deploy:hosting
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🧪 Local Development
 
-### `npm run build` fails to minify
+### Start React Development Server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm start
+```
+
+Server runs at http://localhost:3000
+
+### Test Cloud Functions Locally
+
+```bash
+# In another terminal
+firebase emulators:start --only functions
+```
+
+Functions will be available at http://localhost:5001/sd24pages-e149c/us-central1/
+
+## 📁 Project Structure
+
+```
+SD24-pages/
+├── src/                          # React app source
+│   ├── App.js                   # Main App component
+│   ├── App.css                  # App styles
+│   ├── index.js                 # React entry point
+│   └── index.css                # Global styles
+├── public/                       # Static assets
+│   ├── index.html               # HTML entry point for React
+│   ├── css/                     # Static stylesheets
+│   ├── images/                  # Image assets
+│   └── js/                      # Static JavaScript files
+├── functions/                    # Firebase Cloud Functions
+│   ├── index.js                 # Cloud Functions source
+│   ├── package.json             # Functions dependencies
+│   └── .env.example             # Environment variables template
+├── firebase.json                # Firebase configuration
+├── package.json                 # Root package.json
+└── .firebaserc                  # Firebase project config
+```
+
+## 📧 Cloud Functions
+
+The project includes the following Cloud Functions:
+
+### sendWelcomeEmail
+- **Trigger:** User creation in Firebase Auth
+- **Purpose:** Sends welcome email to new users
+
+### sendVerificationEmail
+- **Trigger:** Call from client
+- **Purpose:** Sends email verification link
+
+### sendLoginOTP
+- **Trigger:** Call from client
+- **Purpose:** Generates and sends one-time password for login
+
+### verifyLoginOTP
+- **Trigger:** Call from client
+- **Purpose:** Validates OTP and creates custom login token
+
+### resendVerificationEmail
+- **Trigger:** Call from client
+- **Purpose:** Resends verification email to users
+
+## 🔐 Security
+
+- Email verification required before login
+- OTP-based authentication with 5-minute expiration
+- Rate limiting on OTP attempts (5 attempts max)
+- Environment variables for sensitive data
+- Firebase security rules configured in console
+
+## 📱 Responsive Design
+
+The application is fully responsive and works on:
+- Mobile devices (320px and up)
+- Tablets (768px and up)
+- Desktops (1024px and up)
+
+## 🐛 Troubleshooting
+
+### Functions Deployment Issues
+- Ensure Node.js version is 18 or higher: `node --version`
+- Check Firebase CLI is installed: `firebase --version`
+- Verify project ID: `firebase projects:list`
+
+### Gmail Email Issues
+- Ensure Gmail app password is generated (not regular password)
+- Check spam folder for emails
+- Verify GMAIL_USER and GMAIL_PASSWORD in environment
+
+### React Build Issues
+- Clear node_modules: `rm -rf node_modules && npm install`
+- Clear build cache: `rm -rf build && npm run build`
+- Check Node version compatibility
+
+## 📝 License
+
+This project is part of SD24 LIB.
+
+## 🤝 Support
+
+For issues or questions, contact the development team.

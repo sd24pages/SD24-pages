@@ -2,819 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SD24 LIB | Access Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-functions.js"></script>
     <style>
-        :root { 
-            --bg: #0b0e14; 
-            --primary: #6366f1; 
-            --card: #161a23;
-            --error: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            color: white; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-
-        .auth-container { position: relative; width: 100%; height: 100vh; }
-
-        .back-button {
-            position: absolute;
-            top: 30px;
-            left: 8%;
-            text-decoration: none;
-            color: #94a3b8;
-            font-weight: 700;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            z-index: 100;
-            cursor: pointer;
-        }
-
-        .back-button svg { margin-right: 8px; }
-        .back-button:hover { color: var(--primary); }
-
-        .auth-card { 
-            background: var(--card); 
-            padding: 40px; 
-            border-radius: 24px; 
-            width: 100%; 
-            max-width: 400px; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            margin: auto;
-        }
-
-        h2 { 
-            font-size: 1.8rem; 
-            font-weight: 800; 
-            margin-bottom: 10px; 
-            text-align: center; 
-        }
-
-        p { 
-            color: #94a3b8; 
-            text-align: center; 
-            margin-bottom: 30px; 
-            font-size: 0.9rem; 
-        }
-
+        :root { --bg: #0b0e14; --primary: #6366f1; --card: #161a23; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-card { background: var(--card); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; text-align: center; }
+        p { color: #94a3b8; text-align: center; margin-bottom: 30px; font-size: 0.9rem; }
         .input-group { margin-bottom: 15px; }
-
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-size: 0.8rem; 
-            color: #94a3b8; 
-        }
-
-        input, select { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 10px; 
-            border: 1px solid #2d3748; 
-            background: #0b0e14; 
-            color: white; 
-            outline: none;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        input:focus, select:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .btn-auth { 
-            width: 100%; 
-            padding: 14px; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            margin-top: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .btn-auth:hover { 
-            background: #5558e3;
-            transform: translateY(-2px);
-        }
-
-        .btn-auth:disabled {
-            background: #4b5563;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .toggle-text { 
-            text-align: center; 
-            margin-top: 20px; 
-            font-size: 0.85rem; 
-            color: #94a3b8; 
-        }
-
-        .toggle-text span { 
-            color: var(--primary); 
-            cursor: pointer; 
-            font-weight: 600;
-        }
-
-        .toggle-text span:hover { text-decoration: underline; }
-
-        .hidden { display: none !important; }
-
-        .alert {
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert.error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .alert.success {
-            background: rgba(16, 185, 129, 0.1);
-            color: #86efac;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .alert.warning {
-            background: rgba(245, 158, 11, 0.1);
-            color: #fcd34d;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .otp-input-group {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 30px 0;
-        }
-
-        .otp-input {
-            width: 50px !important;
-            height: 50px;
-            text-align: center;
-            font-size: 24px !important;
-            font-weight: bold;
-            border: 2px solid #2d3748 !important;
-        }
-
-        .otp-input:focus {
-            border-color: var(--primary) !important;
-        }
-
-        .timer {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-top: 15px;
-        }
-
-        .timer strong { color: var(--warning); }
-
-        .divider {
-            text-align: center;
-            color: #4b5563;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 45%;
-            height: 1px;
-            background: #2d3748;
-        }
-
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-
-        .verification-status {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-            color: #86efac;
-            margin: 20px 0;
-        }
-
-        .password-strength {
-            margin-top: 8px;
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .strength-weak { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
-        .strength-fair { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
-        .strength-good { background: rgba(34, 197, 94, 0.2); color: #86efac; }
-
-        .loader {
-            border: 3px solid rgba(99, 102, 241, 0.1);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .resend-section {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .resend-text {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            margin-bottom: 10px;
-        }
-
-        .resend-btn {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .resend-btn:hover:not(:disabled) {
-            background: var(--primary);
-            color: white;
-        }
-
-        .resend-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        label { display: block; margin-bottom: 8px; font-size: 0.8rem; color: #94a3b8; }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #2d3748; background: #0b0e14; color: white; outline: none; }
+        input:focus { border-color: var(--primary); }
+        .btn-auth { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .toggle-text { text-align: center; margin-top: 20px; font-size: 0.85rem; color: #94a3b8; }
+        .toggle-text span { color: var(--primary); cursor: pointer; font-weight: 600; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <a class="back-button" onclick="goBack()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-            Cancel
-        </a>
-
-        <div class="auth-card">
-            <!-- LOGIN FORM -->
-            <div id="login-form" class="form-section">
-                <h2>Welcome Back</h2>
-                <p>Login to access the digital archives.</p>
-                
-                <div id="login-alert" class="hidden"></div>
-
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" id="login-email" placeholder="name@company.com">
-                </div>
-
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="login-password" placeholder="••••••••">
-                </div>
-
-                <button class="btn-auth" id="login-btn" onclick="handleLogin()">Login</button>
-
-                <div class="toggle-text">
-                    New user? <span onclick="switchForm('signup')">Create an account</span>
-                </div>
+	<div style="position: absolute; top: 30px; left: 8%; width: 84%; display: flex; justify-content: flex-start;">
+    <a href="library.html" style="text-decoration: none; color: #94a3b8; font-weight: 700; font-size: 14px; display: flex; align-items: center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        Cancel
+    </a>
+</div>
+    <div class="auth-card">
+        <div id="login-form">
+            <h2>Welcome Back</h2>
+            <p>Login to access the digital archives.</p>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="name@company.com">
             </div>
-
-            <!-- SIGNUP FORM -->
-            <div id="signup-form" class="form-section hidden">
-                <h2>Create Account</h2>
-                <p>Join SD24 to start browsing books.</p>
-                
-                <div id="signup-alert" class="hidden"></div>
-
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="signup-name" placeholder="John Doe">
-                </div>
-
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" id="signup-email" placeholder="name@company.com">
-                </div>
-
-                <div class="input-group">
-                    <label>Create Password</label>
-                    <input type="password" id="signup-password" placeholder="••••••••" onchange="checkPasswordStrength()">
-                    <div id="password-strength" class="hidden password-strength"></div>
-                </div>
-
-                <div class="input-group">
-                    <label>Confirm Password</label>
-                    <input type="password" id="signup-confirm" placeholder="••••••••">
-                </div>
-
-                <button class="btn-auth" id="signup-btn" onclick="handleSignup()">Sign Up</button>
-
-                <div class="toggle-text">
-                    Already have an account? <span onclick="switchForm('login')">Login here</span>
-                </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••">
             </div>
+            <button class="btn-auth" onclick="handleAuth()">Login</button>
+            <div class="toggle-text">New user? <span onclick="toggleForm()">Create an account</span></div>
+        </div>
 
-            <!-- VERIFY EMAIL FORM -->
-            <div id="verify-email-form" class="form-section hidden">
-                <h2>Verify Your Email</h2>
-                <p>We've sent a verification link to your email.</p>
-
-                <div id="verify-alert" class="hidden"></div>
-
-                <div class="verification-status">
-                    <p>✓ Account created successfully!</p>
-                    <p style="font-size: 0.85rem; margin-top: 8px;">Check your inbox and click the verification link.</p>
-                </div>
-
-                <div class="input-group">
-                    <label>Your Email</label>
-                    <input type="email" id="verify-email" disabled>
-                </div>
-
-                <div class="resend-section">
-                    <p class="resend-text">Didn't receive the email?</p>
-                    <button class="resend-btn" id="resend-btn" onclick="resendVerificationEmail()">Resend Verification Link</button>
-                </div>
-
-                <button class="btn-auth" onclick="switchForm('login')" style="margin-top: 30px;">Back to Login</button>
+        <div id="signup-form" class="hidden">
+            <h2>Create Account</h2>
+            <p>Join SD24 to start browsing books.</p>
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="John Doe">
             </div>
-
-            <!-- OTP FORM -->
-            <div id="otp-form" class="form-section hidden">
-                <h2>Verify Identity</h2>
-                <p>Enter the 6-digit code sent to your email.</p>
-
-                <div id="otp-alert" class="hidden"></div>
-
-                <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid rgba(99, 102, 241, 0.3);">
-                    <p style="color: #bfdbfe; font-size: 0.9rem; margin: 0;" id="otp-email-display"></p>
-                </div>
-
-                <label style="display: block; text-align: center; margin-bottom: 20px; color: #94a3b8;">Enter OTP</label>
-                <div class="otp-input-group">
-                    <input type="text" class="otp-input" id="otp-1" maxlength="1" onkeyup="moveToNext(this, 'otp-2')">
-                    <input type="text" class="otp-input" id="otp-2" maxlength="1" onkeyup="moveToNext(this, 'otp-3')">
-                    <input type="text" class="otp-input" id="otp-3" maxlength="1" onkeyup="moveToNext(this, 'otp-4')">
-                    <input type="text" class="otp-input" id="otp-4" maxlength="1" onkeyup="moveToNext(this, 'otp-5')">
-                    <input type="text" class="otp-input" id="otp-5" maxlength="1" onkeyup="moveToNext(this, 'otp-6')">
-                    <input type="text" class="otp-input" id="otp-6" maxlength="1" onkeyup="handleOTPComplete()">
-                </div>
-
-                <div class="timer">
-                    <p>Code expires in <strong id="timer">5:00</strong></p>
-                </div>
-
-                <button class="btn-auth" id="verify-otp-btn" onclick="verifyOTP()">Verify & Login</button>
-
-                <div class="resend-section">
-                    <p class="resend-text">Didn't receive the code?</p>
-                    <button class="resend-btn" id="resend-otp-btn" onclick="resendOTP()">Resend OTP</button>
-                </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="name@company.com">
             </div>
+            <div class="input-group">
+                <label>Create Password</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            <button class="btn-auth" onclick="handleAuth()">Sign Up</button>
+            <div class="toggle-text">Already have an account? <span onclick="toggleForm()">Login here</span></div>
         </div>
     </div>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAk5vTQUKs0G8H0mK9nL2pQ3rStUvWxYzA",
-            authDomain: "sd24pages-e149c.firebaseapp.com",
-            projectId: "sd24pages-e149c",
-            storageBucket: "sd24pages-e149c.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890abcdef"
-        };
+        function toggleForm() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const functions = firebase.functions();
-
-        // State Management
-        let currentOTPEmail = '';
-        let otpTimer = null;
-        let otpResendCooldown = 0;
-
-        // Utility Functions
-        function showAlert(elementId, message, type = 'error') {
-            const alert = document.getElementById(elementId);
-            alert.textContent = message;
-            alert.className = `alert ${type}`;
-            alert.classList.remove('hidden');
+        function handleAuth() {
+            // Simulate Authentication
+            localStorage.setItem('isLoggedIn', 'true');
             
-            if (type !== 'error') {
-                setTimeout(() => alert.classList.add('hidden'), 5000);
-            }
-        }
-
-        function hideAlert(elementId) {
-            document.getElementById(elementId).classList.add('hidden');
-        }
-
-        function switchForm(form) {
-            document.querySelectorAll('.form-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(form + '-form').classList.remove('hidden');
-            hideAlert(form + '-alert');
-        }
-
-        function goBack() {
-            window.location.href = 'library.html';
-        }
-
-        // Password Strength Checker
-        function checkPasswordStrength() {
-            const password = document.getElementById('signup-password').value;
-            const strengthDiv = document.getElementById('password-strength');
+            // Redirect back to the intended category if it exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
             
-            if (password.length === 0) {
-                strengthDiv.classList.add('hidden');
-                return;
-            }
-
-            let strength = 0;
-            if (password.length >= 8) strength++;
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-            if (/[0-9]/.test(password)) strength++;
-            if (/[^a-zA-Z0-9]/.test(password)) strength++;
-
-            strengthDiv.classList.remove('hidden');
-            
-            if (strength < 2) {
-                strengthDiv.className = 'password-strength strength-weak';
-                strengthDiv.textContent = '⚠ Weak password';
-            } else if (strength < 3) {
-                strengthDiv.className = 'password-strength strength-fair';
-                strengthDiv.textContent = '○ Fair password';
+            if (redirect) {
+                window.location.href = `category.html?type=${encodeURIComponent(redirect)}`;
             } else {
-                strengthDiv.className = 'password-strength strength-good';
-                strengthDiv.textContent = '✓ Strong password';
-            }
-        }
-
-        // LOGIN
-        async function handleLogin() {
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-
-            if (!email || !password) {
-                showAlert('login-alert', 'Please fill in all fields', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('login-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> Logging in...';
-
-            try {
-                // STEP 1: Verify email and password with Firebase Auth
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Check if email is verified
-                await user.reload();
-                if (!user.emailVerified) {
-                    await auth.signOut();
-                    showAlert('login-alert', 'Please verify your email before logging in.', 'warning');
-                    btn.disabled = false;
-                    btn.innerHTML = 'Login';
-                    return;
-                }
-
-                // STEP 2: If credentials are valid, send OTP
-                const sendOTP = firebase.functions().httpsCallable('sendLoginOTP');
-                await sendOTP({ email });
-                
-                // STEP 3: Sign out from Firebase Auth (OTP will handle the actual login)
-                await auth.signOut();
-                
-                // If OTP sent successfully, store email and switch to OTP form
-                currentOTPEmail = email;
-                startOTPTimer();
-                switchForm('otp');
-                document.getElementById('otp-email-display').textContent = `Code sent to ${email}`;
-                
-            } catch (error) {
-                await auth.signOut().catch(() => {});
-                
-                let message = 'Login failed. Please try again.';
-                if (error.code === 'auth/user-not-found') {
-                    message = 'Email not registered. Please sign up first.';
-                } else if (error.code === 'auth/wrong-password') {
-                    message = 'Incorrect password. Please try again.';
-                } else if (error.code === 'auth/invalid-email') {
-                    message = 'Invalid email address.';
-                } else if (error.code === 'auth/too-many-requests') {
-                    message = 'Too many failed login attempts. Please try again later.';
-                } else if (error.message && error.message.includes('verify')) {
-                    message = 'Please verify your email before logging in.';
-                }
-                showAlert('login-alert', message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Login';
-            }
-        }
-
-        // SIGNUP
-        async function handleSignup() {
-            const name = document.getElementById('signup-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('signup-confirm').value;
-
-            if (!name || !email || !password || !confirmPassword) {
-                showAlert('signup-alert', 'Please fill in all fields', 'error');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                showAlert('signup-alert', 'Passwords do not match', 'error');
-                return;
-            }
-
-            if (password.length < 8) {
-                showAlert('signup-alert', 'Password must be at least 8 characters', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('signup-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> Creating account...';
-
-            try {
-                // Create user with Firebase Auth
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Update user profile
-                await user.updateProfile({ displayName: name });
-
-                // Send verification email via Cloud Function
-                const sendVerification = firebase.functions().httpsCallable('sendVerificationEmail');
-                await sendVerification({ 
-                    email: user.email,
-                    displayName: name
-                });
-
-                // Store user data in Firestore
-                await db.collection('users').doc(user.uid).set({
-                    uid: user.uid,
-                    name: name,
-                    email: email,
-                    createdAt: new Date(),
-                    emailVerified: false
-                });
-
-                // Switch to verification form
-                document.getElementById('verify-email').value = email;
-                switchForm('verify_email');
-
-            } catch (error) {
-                console.error('Sign up error:', error);
-                let message = 'Sign up failed. Please try again.';
-                
-                if (error.code === 'auth/email-already-in-use') {
-                    message = 'This email is already registered. Please login instead.';
-                } else if (error.code === 'auth/weak-password') {
-                    message = 'Password is too weak. Use at least 8 characters.';
-                } else if (error.code === 'auth/invalid-email') {
-                    message = 'Please enter a valid email address.';
-                } else if (error.message && error.message.includes('Email service is not configured')) {
-                    message = 'Email service is temporarily unavailable. Account created but please contact support to enable emails.';
-                } else if (error.message) {
-                    message = error.message;
-                }
-                
-                console.log('User error message:', message);
-                showAlert('signup-alert', message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Sign Up';
-            }
-        }
-
-        // OTP TIMER
-        function startOTPTimer() {
-            let timeLeft = 300; // 5 minutes
-            const timerEl = document.getElementById('timer');
-
-            if (otpTimer) clearInterval(otpTimer);
-
-            otpTimer = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(otpTimer);
-                    showAlert('otp-alert', 'OTP expired. Please request a new one.', 'warning');
-                    document.getElementById('verify-otp-btn').disabled = true;
-                }
-            }, 1000);
-        }
-
-        // OTP Navigation
-        function moveToNext(current, nextId) {
-            if (current.value.length === 1) {
-                document.getElementById(nextId).focus();
-            }
-        }
-
-        function handleOTPComplete() {
-            const otp1 = document.getElementById('otp-1').value;
-            const otp2 = document.getElementById('otp-2').value;
-            const otp3 = document.getElementById('otp-3').value;
-            const otp4 = document.getElementById('otp-4').value;
-            const otp5 = document.getElementById('otp-5').value;
-            const otp6 = document.getElementById('otp-6').value;
-
-            if (otp1 && otp2 && otp3 && otp4 && otp5 && otp6) {
-                verifyOTP();
-            }
-        }
-
-        // VERIFY OTP
-        async function verifyOTP() {
-            const otp = document.getElementById('otp-1').value +
-                       document.getElementById('otp-2').value +
-                       document.getElementById('otp-3').value +
-                       document.getElementById('otp-4').value +
-                       document.getElementById('otp-5').value +
-                       document.getElementById('otp-6').value;
-
-            if (otp.length !== 6) {
-                showAlert('otp-alert', 'Please enter the complete 6-digit code', 'error');
-                return;
-            }
-
-            const btn = document.getElementById('verify-otp-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loader"></span> Verifying...';
-
-            try {
-                const verifyOTP = firebase.functions().httpsCallable('verifyLoginOTP');
-                const result = await verifyOTP({ 
-                    email: currentOTPEmail,
-                    otp: otp
-                });
-
-                if (result.data.success) {
-                    // Store auth token and redirect
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('userEmail', currentOTPEmail);
-                    
-                    showAlert('otp-alert', 'Login successful! Redirecting...', 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'library.html';
-                    }, 1500);
-                }
-            } catch (error) {
-                let message = 'Invalid OTP. Please try again.';
-                if (error.message.includes('expired')) {
-                    message = 'OTP has expired. Please request a new one.';
-                } else if (error.message.includes('Too many')) {
-                    message = 'Too many failed attempts. Please request a new OTP.';
-                }
-                showAlert('otp-alert', message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Verify & Login';
-            }
-        }
-
-        // RESEND OTP
-        async function resendOTP() {
-            const btn = document.getElementById('resend-otp-btn');
-            if (btn.disabled) return;
-
-            btn.disabled = true;
-            btn.textContent = 'Sending...';
-
-            try {
-                const sendOTP = firebase.functions().httpsCallable('sendLoginOTP');
-                await sendOTP({ email: currentOTPEmail });
-
-                showAlert('otp-alert', 'New OTP sent to your email', 'success');
-                
-                // Clear previous OTP
-                for (let i = 1; i <= 6; i++) {
-                    document.getElementById(`otp-${i}`).value = '';
-                }
-                document.getElementById('otp-1').focus();
-                
-                // Restart timer
-                startOTPTimer();
-                
-                // Cooldown for resend button
-                otpResendCooldown = 30;
-                const cooldownInterval = setInterval(() => {
-                    otpResendCooldown--;
-                    btn.textContent = `Resend OTP (${otpResendCooldown}s)`;
-                    if (otpResendCooldown <= 0) {
-                        clearInterval(cooldownInterval);
-                        btn.disabled = false;
-                        btn.textContent = 'Resend OTP';
-                    }
-                }, 1000);
-
-            } catch (error) {
-                showAlert('otp-alert', 'Failed to resend OTP. Please try again.', 'error');
-                btn.disabled = false;
-                btn.textContent = 'Resend OTP';
-            }
-        }
-
-        // RESEND VERIFICATION EMAIL
-        async function resendVerificationEmail() {
-            const email = document.getElementById('verify-email').value;
-            const btn = document.getElementById('resend-btn');
-            btn.disabled = true;
-            btn.textContent = 'Sending...';
-
-            try {
-                const sendVerification = firebase.functions().httpsCallable('sendVerificationEmail');
-                await sendVerification({ 
-                    email: email,
-                    displayName: document.getElementById('signup-name').value
-                });
-
-                showAlert('verify-alert', 'Verification email resent! Check your inbox.', 'success');
-                
-                // Cooldown
-                let cooldown = 60;
-                const interval = setInterval(() => {
-                    cooldown--;
-                    btn.textContent = `Resend (${cooldown}s)`;
-                    if (cooldown <= 0) {
-                        clearInterval(interval);
-                        btn.disabled = false;
-                        btn.textContent = 'Resend Verification Link';
-                    }
-                }, 1000);
-
-            } catch (error) {
-                showAlert('verify-alert', 'Failed to resend email. Please try again.', 'error');
-                btn.disabled = false;
-                btn.textContent = 'Resend Verification Link';
-            }
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if user is already logged in
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (isLoggedIn) {
                 window.location.href = 'library.html';
             }
-        });
+        }
     </script>
 </body>
 </html>

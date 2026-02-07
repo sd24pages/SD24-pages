@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="SD24 LIB - Premium Digital Library"
+    />
     <title>SD24 LIB | Premium Digital Library</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/session-manager.css">
   
 
     <style>
@@ -139,22 +143,6 @@
         </div>
     </section>
 
-    <script>
-        const textElement = document.getElementById("typewriter");
-        const words = ["Classics.", "Fiction.", "Anytime.", "Worlds."];
-        let wordIndex = 0, charIndex = 0, isDeleting = false;
-
-        function type() {
-            const currentWord = words[wordIndex];
-            textElement.textContent = isDeleting ? currentWord.substring(0, charIndex--) : currentWord.substring(0, charIndex++);
-            let typeSpeed = isDeleting ? 100 : 200;
-            if (!isDeleting && charIndex === currentWord.length + 1) { isDeleting = true; typeSpeed = 2000; }
-            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
-            setTimeout(type, typeSpeed);
-        }
-        document.addEventListener("DOMContentLoaded", type);
-    </script>
-    <!-- Session Manager for Auto-Logout -->
-    <script src="js/session-manager.js"></script>
+    <div id="root"></div>
 </body>
 </html>

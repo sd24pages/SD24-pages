@@ -3,34 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD24 LIB | Member Portal</title>
+    <title>Dashboard | SD24 Vault</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/session-manager.css">
     <style>
         :root { --bg: #020617; --primary: #6366f1; --card: #0f172a; --border: rgba(255,255,255,0.1); }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .login-card { background: var(--card); padding: 40px; border-radius: 24px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid var(--border); background: #1e293b; color: white; }
-        .btn-submit { width: 100%; padding: 12px; background: var(--primary); border: none; border-radius: 10px; color: white; font-weight: 700; cursor: pointer; }
-        .nav-links { margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
-        .nav-links a { color: #94a3b8; text-decoration: none; font-size: 13px; transition: 0.3s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; margin: 0; padding: 0; }
+        
+        /* Universal Navbar to keep pages "Attached" */
+        .nav-header { 
+            padding: 20px 8%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-weight: 800; color: var(--primary); font-size: 24px; text-decoration: none; }
+        .nav-links a { color: #94a3b8; text-decoration: none; margin-left: 20px; font-size: 14px; transition: 0.3s; }
         .nav-links a:hover { color: white; }
+
+        .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+        .welcome-box { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); padding: 40px; border-radius: 24px; margin-bottom: 30px; }
+        .welcome-box h1 { margin: 0; font-size: 2rem; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .stat-card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
+        .stat-card h3 { color: #94a3b8; font-size: 14px; margin-top: 0; }
+        
+        .btn-logout { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h2>Member Portal</h2>
-        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 30px;">Login to access your digital books.</p>
-        <input type="text" placeholder="Email Address">
-        <input type="password" placeholder="Password">
-        <button class="btn-submit">Sign In</button>
-        
+
+    <nav class="nav-header">
+        <a href="index.html" class="logo">SD24</a>
         <div class="nav-links">
-            <a href="library.html">← Back to Library Catalog</a>
-            <a href="index.html" style="font-weight: 800; color: var(--primary);">Go to Website Home Page</a>
+            <a href="library.html">Library</a>
+            <a href="contact.html">Contact</a>
+            <a href="terms.html">Terms</a>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h1 id="userGreeting">Hello, Member!</h1>
+            <p>Welcome to your personal SD24 dashboard.</p>
+        </div>
+
+        <div class="grid">
+            <div class="stat-card">
+                <h3>Current Readings</h3>
+                <p id="bookCount" style="font-size: 24px; font-weight: 800; margin: 10px 0;">3 Books Available</p>
+                <a href="library.html" style="color: var(--primary); text-decoration: none; font-size: 14px;">Go to Vault →</a>
+            </div>
+            <div class="stat-card">
+                <h3>Account Status</h3>
+                <p style="font-size: 18px; color: #22c55e; margin: 10px 0;">Verified Member</p>
+                <a href="contact.html" style="color: #94a3b8; text-decoration: none; font-size: 14px;">Support</a>
+            </div>
         </div>
     </div>
-    <!-- Session Manager for Auto-Logout -->
-    <script src="js/session-manager.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js"></script>
+
+    <script>
+        // Check if user is logged in
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // If the user has a Display Name, use it; otherwise use email
+                const name = user.displayName || user.email.split('@')[0];
+                document.getElementById('userGreeting').innerText = `Hello, ${name}!`;
+            } else {
+                // Not logged in? Send them back to portal
+                window.location.href = "portal.html";
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = "portal.html";
+            });
+        }
+    </script>
 </body>
 </html>
